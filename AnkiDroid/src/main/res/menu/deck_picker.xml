@@ -66,7 +66,11 @@
     <item
         android:id="@+id/action_speedrun_decks"
         android:menuCategory="secondary"
-        android:title="Import AMC decks"/>
+        android:title="Import Speedrun decks"/>
+    <item
+        android:id="@+id/action_speedrun_scores"
+        android:menuCategory="secondary"
+        android:title="Speedrun scores"/>
     <item
         android:id="@+id/action_export_collection"
         android:menuCategory="secondary" />

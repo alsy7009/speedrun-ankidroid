@@ -1306,8 +1306,13 @@ open class DeckPicker :
                 return true
             }
             R.id.action_speedrun_decks -> {
-                Timber.i("DeckPicker:: Speedrun AMC decks button pressed")
+                Timber.i("DeckPicker:: Speedrun decks button pressed")
                 showSpeedrunDeckPicker()
+                return true
+            }
+            R.id.action_speedrun_scores -> {
+                Timber.i("DeckPicker:: Speedrun scores button pressed")
+                showSpeedrunScores()
                 return true
             }
             R.id.action_check_database -> {
