@@ -1315,6 +1315,11 @@ open class DeckPicker :
                 showSpeedrunScores()
                 return true
             }
+            R.id.action_speedrun_timed -> {
+                Timber.i("DeckPicker:: Speedrun practice test pressed")
+                startSpeedrunPracticeTest()
+                return true
+            }
             R.id.action_check_database -> {
                 Timber.i("DeckPicker:: Check database button pressed")
                 showDatabaseErrorDialog(DatabaseErrorDialogType.DIALOG_CONFIRM_DATABASE_CHECK)

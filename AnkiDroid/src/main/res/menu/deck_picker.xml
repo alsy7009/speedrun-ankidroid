@@ -72,6 +72,10 @@
         android:menuCategory="secondary"
         android:title="Speedrun scores"/>
     <item
+        android:id="@+id/action_speedrun_timed"
+        android:menuCategory="secondary"
+        android:title="Practice Test"/>
+    <item
         android:id="@+id/action_export_collection"
         android:menuCategory="secondary" />
 </menu>

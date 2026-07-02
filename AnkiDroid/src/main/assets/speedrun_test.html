@@ -1,0 +1,232 @@
+<!doctype html>
+<!-- Speedrun Practice Test — custom test-taking screen for AnkiDroid.
+     Mirrors the desktop qt/aqt/speedrun_test.py UI. Questions are injected by
+     Kotlin (replacing __SR_DATA__). The JS→Kotlin bridge is window.pycmd ->
+     AndroidSpeedrun.cmd(). MathJax renders all LaTeX. -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script>
+  window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] } };
+  window.pycmd = function (s) { try { AndroidSpeedrun.cmd(s); } catch (e) {} };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" async></script>
+<style>
+body { background: #edf3fa; color: #102a43; margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-user-select: none; }
+#sr-wrap { max-width: 720px; margin: 0 auto; padding: 16px 18px 40px; }
+#sr-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+#sr-progress { font-weight: 800; font-size: 16px; }
+#sr-count { color: #5a7184; font-weight: 600; font-size: 13px; }
+#sr-timer { margin-left: auto; font-weight: 700; font-size: 13px; color: #0d47a1;
+  background: #e3f0fb; border: 1px solid #b7d6f4; border-radius: 999px; padding: 6px 12px; }
+#sr-timer.up { color: #b3261e; background: #fdecea; border-color: #f2b8b5; }
+#sr-track { height: 6px; background: #d5e6f7; border-radius: 999px; margin: 8px 0 18px; overflow: hidden; }
+#sr-fill { height: 100%; width: 0; background: linear-gradient(90deg,#1565c0,#42a5f5); transition: width .25s; }
+.sr-meta { font-size: 12px; font-weight: 700; color: #1e88e5; text-transform: uppercase;
+  letter-spacing: .07em; margin-bottom: 10px; }
+.sr-problem { font-size: 19px; line-height: 1.5; margin-bottom: 16px; }
+.sr-choice { display: block; width: 100%; text-align: left; font-size: 17px;
+  background: #fff; border: 2px solid #cfe0f2; border-radius: 12px; padding: 13px 15px;
+  margin: 8px 0; color: inherit; -webkit-tap-highlight-color: transparent; }
+.sr-choice.sel { border-color: #1e88e5; background: #e3f0fb; }
+.sr-choice.lock { opacity: .95; }
+.sr-choice.correct { border-color: #2e9e5b; background: #e7f6ec; }
+.sr-choice.wrong { border-color: #d64545; background: #fbeaea; }
+.sr-rate { margin-top: 16px; display: none; }
+.sr-rate p { color: #5a7184; font-weight: 600; margin: 0 0 8px; }
+.sr-rate .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.sr-btn { flex: 1; min-width: 72px; border: none; border-radius: 12px; padding: 13px;
+  font-weight: 700; font-size: 15px; color: #fff; }
+.b-again { background: #d64545; } .b-hard { background: #e08a1e; }
+.b-good { background: #2e9e5b; } .b-easy { background: #1976d2; }
+.sr-solution { margin-top: 14px; padding: 13px 15px; background: #eef5fd;
+  border-left: 4px solid #1e88e5; border-radius: 8px; font-size: 16px; line-height: 1.5; }
+#sr-results { display: none; text-align: center; padding-top: 40px; }
+#sr-results h1 { font-size: 27px; margin: 0 0 6px; }
+#sr-results p { color: #5a7184; font-size: 16px; }
+#sr-review, #sr-done { border: none; border-radius: 14px; padding: 14px 20px;
+  font-weight: 700; font-size: 16px; margin: 8px; }
+#sr-review { background: linear-gradient(90deg,#1565c0,#1e88e5); color: #fff; }
+#sr-done { background: #dfeafa; color: #102a43; }
+</style>
+</head>
+<body>
+<div id="sr-wrap">
+  <div id="sr-bar">
+    <span id="sr-progress">Question 1</span>
+    <span id="sr-count"></span>
+    <span id="sr-timer"></span>
+  </div>
+  <div id="sr-track"><div id="sr-fill"></div></div>
+  <div id="sr-card">
+    <div class="sr-meta" id="sr-meta"></div>
+    <div class="sr-problem" id="sr-problem"></div>
+    <div id="sr-choices"></div>
+    <div class="sr-solution" id="sr-sol" style="display:none"></div>
+    <div class="sr-rate" id="sr-rate">
+      <p id="sr-rate-label">Answer locked. How hard was it?</p>
+      <div class="row">
+        <button class="sr-btn b-again" data-ease="1">Again</button>
+        <button class="sr-btn b-hard" data-ease="2">Hard</button>
+        <button class="sr-btn b-good" data-ease="3">Good</button>
+        <button class="sr-btn b-easy" data-ease="4">Easy</button>
+      </div>
+    </div>
+  </div>
+  <div id="sr-results">
+    <h1 id="sr-score"></h1>
+    <p id="sr-sub"></p>
+    <div style="margin-top:22px">
+      <button id="sr-review"></button>
+      <button id="sr-done">Done</button>
+    </div>
+  </div>
+</div>
+<script>
+window.SR = __SR_DATA__;
+(function () {
+  var Q = (window.SR && window.SR.questions) || [];
+  var LIMIT = ((window.SR && window.SR.minutes) || 40) * 60 * 1000;
+  var idx = 0, selected = null, start = Date.now(), finished = false;
+  var phase = "test", reviewList = [], rIdx = 0;
+
+  var el = function (id) { return document.getElementById(id); };
+  function typeset(node) {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise(node ? [node] : undefined).catch(function () {});
+    } else { setTimeout(function () { typeset(node); }, 150); }
+  }
+  function send(cmd) { if (typeof pycmd !== "undefined") pycmd(cmd); }
+
+  function render() {
+    var q = Q[idx];
+    selected = null;
+    el("sr-progress").textContent = "Question " + (idx + 1);
+    el("sr-count").textContent = "of " + Q.length;
+    el("sr-fill").style.width = (100 * idx / Q.length) + "%";
+    el("sr-meta").textContent = q.meta;
+    el("sr-problem").innerHTML = q.problem;
+    el("sr-sol").style.display = "none";
+    el("sr-rate").style.display = "none";
+    el("sr-rate-label").textContent = "Answer locked. How hard was it?";
+    var box = el("sr-choices");
+    box.innerHTML = "";
+    q.choices.forEach(function (c) {
+      var b = document.createElement("button");
+      b.className = "sr-choice";
+      b.innerHTML = "<b>" + c[0] + ".</b> " + c[1];
+      b.addEventListener("click", function () { pick(b, c[0]); });
+      box.appendChild(b);
+    });
+    typeset(el("sr-card"));
+  }
+  function pick(btn, letter) {
+    if (selected !== null) return;
+    selected = letter;
+    document.querySelectorAll(".sr-choice").forEach(function (b) { b.classList.add("lock"); });
+    btn.classList.add("sel");
+    el("sr-rate").style.display = "block";
+  }
+  document.querySelectorAll("#sr-rate .sr-btn").forEach(function (b) {
+    b.addEventListener("click", function () { rate(b.getAttribute("data-ease")); });
+  });
+  function rate(ease) {
+    if (phase === "test") {
+      if (selected === null) return;
+      var q = Q[idx];
+      var correct = (selected === q.answer) ? 1 : 0;
+      q._sel = selected;
+      send("sr:record:" + q.cid + ":" + correct + ":" + ease);
+      if (!correct || ease === "1" || ease === "2") reviewList.push(q);
+      idx++;
+      if (idx >= Q.length) showResults(); else render();
+    } else {
+      rIdx++;
+      if (rIdx >= reviewList.length) finishReview(); else renderReview();
+    }
+  }
+
+  function showResults() {
+    finished = true;
+    el("sr-card").style.display = "none";
+    el("sr-bar").style.display = "none";
+    el("sr-track").style.display = "none";
+    var answered = Math.min(idx, Q.length);
+    el("sr-score").textContent = "Test complete";
+    el("sr-sub").textContent = answered + " of " + Q.length + " answered · "
+      + reviewList.length + " to revisit";
+    var rv = el("sr-review");
+    if (reviewList.length > 0) {
+      rv.textContent = "Review the " + reviewList.length + " to revisit";
+      rv.onclick = startReview;
+      rv.style.display = "";
+    } else { rv.style.display = "none"; }
+    el("sr-done").onclick = function () { send("sr:close"); };
+    el("sr-results").style.display = "block";
+  }
+
+  function startReview() {
+    phase = "review"; rIdx = 0;
+    el("sr-results").style.display = "none";
+    el("sr-card").style.display = "";
+    el("sr-bar").style.display = "flex";
+    el("sr-track").style.display = "";
+    el("sr-timer").style.display = "none";
+    renderReview();
+  }
+  function renderReview() {
+    var q = reviewList[rIdx];
+    el("sr-progress").textContent = "Review " + (rIdx + 1);
+    el("sr-count").textContent = "of " + reviewList.length;
+    el("sr-fill").style.width = (100 * rIdx / reviewList.length) + "%";
+    el("sr-meta").textContent = q.meta;
+    el("sr-problem").innerHTML = q.problem;
+    var box = el("sr-choices");
+    box.innerHTML = "";
+    q.choices.forEach(function (c) {
+      var b = document.createElement("button");
+      b.className = "sr-choice lock";
+      if (c[0] === q.answer) b.classList.add("correct");
+      else if (c[0] === q._sel) b.classList.add("wrong");
+      b.innerHTML = "<b>" + c[0] + ".</b> " + c[1];
+      box.appendChild(b);
+    });
+    var sol = el("sr-sol");
+    sol.innerHTML = "<b>Solution.</b> " + (q.solution || "");
+    sol.style.display = "block";
+    el("sr-rate-label").textContent = "Reviewed. How well do you know it now?";
+    el("sr-rate").style.display = "block";
+    typeset(el("sr-card"));
+  }
+  function finishReview() {
+    el("sr-card").style.display = "none";
+    el("sr-bar").style.display = "none";
+    el("sr-track").style.display = "none";
+    el("sr-score").textContent = "Nice work";
+    el("sr-sub").textContent = "You reviewed " + reviewList.length
+      + " question" + (reviewList.length === 1 ? "" : "s") + ".";
+    el("sr-review").style.display = "none";
+    el("sr-done").textContent = "Done";
+    el("sr-done").onclick = function () { send("sr:close"); };
+    el("sr-results").style.display = "block";
+  }
+
+  function tick() {
+    if (finished || phase !== "test") return;
+    var left = LIMIT - (Date.now() - start);
+    var t = el("sr-timer");
+    if (left <= 0) { t.className = "up"; t.textContent = "⏱ Time's up"; showResults(); return; }
+    var m = Math.floor(left / 60000), s = Math.floor((left % 60000) / 1000);
+    t.textContent = "⏱ " + m + ":" + (s < 10 ? "0" : "") + s;
+    setTimeout(tick, 1000);
+  }
+
+  if (!Q.length) { el("sr-problem").textContent = "No questions available."; return; }
+  render();
+  tick();
+})();
+</script>
+</body>
+</html>
