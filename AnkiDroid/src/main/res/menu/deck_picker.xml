@@ -76,6 +76,10 @@
         android:menuCategory="secondary"
         android:title="Practice Test"/>
     <item
+        android:id="@+id/action_speedrun_ai_key"
+        android:menuCategory="secondary"
+        android:title="Speedrun: AI server URL"/>
+    <item
         android:id="@+id/action_export_collection"
         android:menuCategory="secondary" />
 </menu>

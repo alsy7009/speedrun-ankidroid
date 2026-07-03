@@ -137,6 +137,16 @@ android {
 
         def apiKey = properties.getProperty("ANALYTICS_API_KEY") ?: System.getenv("ANALYTICS_API_KEY") ?: "DUMMY_API_XXX"
         buildConfigField "String", "ANALYTICS_API_KEY", "\"${apiKey}\""
+
+        // Speedrun AI tutor server. The OpenAI key lives ONLY on this server
+        // (speedrun/proxy), never in the app, so users cannot extract it. These
+        // are NOT secrets: a URL and an optional rotatable app token. Sourced
+        // from env / local.properties, with a dev default (the emulator reaches
+        // the host machine at 10.0.2.2). Use your deployed URL for release.
+        def proxyUrl = System.getenv("SPEEDRUN_PROXY_URL") ?: properties.getProperty("SPEEDRUN_PROXY_URL") ?: "http://10.0.2.2:8000"
+        def proxyToken = System.getenv("SPEEDRUN_PROXY_TOKEN") ?: properties.getProperty("SPEEDRUN_PROXY_TOKEN") ?: ""
+        buildConfigField "String", "SPEEDRUN_PROXY_URL", "\"${proxyUrl}\""
+        buildConfigField "String", "SPEEDRUN_PROXY_TOKEN", "\"${proxyToken}\""
     }
     signingConfigs {
         release {

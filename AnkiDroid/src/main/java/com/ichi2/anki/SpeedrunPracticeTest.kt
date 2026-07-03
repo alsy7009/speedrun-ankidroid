@@ -23,6 +23,29 @@ private const val SR_SEARCH = "deck:Speedrun::*"
 private const val SR_QUESTIONS = 20
 private const val SR_MINUTES = 40
 
+// LaTeX text commands MathJax ignores -> render as HTML (for decks built before
+// the builder handled these; freshly built decks are already clean).
+private val SR_TEXT_CMDS =
+    listOf(
+        "emph" to Pair("<em>", "</em>"),
+        "textbf" to Pair("<b>", "</b>"),
+        "textit" to Pair("<i>", "</i>"),
+        "underline" to Pair("<u>", "</u>"),
+        "texttt" to Pair("<code>", "</code>"),
+        "textrm" to Pair("", ""),
+        "textsf" to Pair("", ""),
+        "textsc" to Pair("", ""),
+    )
+
+private fun srClean(text: String): String {
+    if (!text.contains("\\")) return text
+    var out = text
+    for ((cmd, tags) in SR_TEXT_CMDS) {
+        out = Regex("\\\\" + cmd + "\\{([^{}]*)\\}").replace(out) { tags.first + it.groupValues[1] + tags.second }
+    }
+    return out
+}
+
 /** Gather up to SR_QUESTIONS random Speedrun questions as a JSON payload, or
  * null if there are none. Skips figure ([asy]) problems we can't render. */
 private fun buildSpeedrunPayload(col: Collection): String? {
@@ -36,6 +59,7 @@ private fun buildSpeedrunPayload(col: Collection): String? {
             } catch (e: Exception) {
                 continue
             }
+
         fun f(name: String): String =
             try {
                 note.getItem(name)
@@ -52,14 +76,19 @@ private fun buildSpeedrunPayload(col: Collection): String? {
         if (problem.isBlank() || choices.length() < 2) continue
         val blob = (problem + " " + solution).lowercase()
         if (blob.contains("[asy]") || blob.contains("[/asy]")) continue
+        val cleanChoices = JSONArray()
+        for (i in 0 until choices.length()) {
+            val c = choices.getJSONArray(i)
+            cleanChoices.put(JSONArray().put(c.getString(0)).put(srClean(c.getString(1))))
+        }
         arr.put(
             JSONObject()
                 .put("cid", cid)
                 .put("meta", "${f("Contest")} ${f("Year")} · Problem ${f("Number")} · ${f("Topic")}")
-                .put("problem", problem)
-                .put("choices", choices)
+                .put("problem", srClean(problem))
+                .put("choices", cleanChoices)
                 .put("answer", f("Answer").trim())
-                .put("solution", solution),
+                .put("solution", srClean(solution)),
         )
     }
     if (arr.length() == 0) return null
@@ -69,6 +98,7 @@ private fun buildSpeedrunPayload(col: Collection): String? {
 private class SpeedrunBridge(
     val dp: DeckPicker,
     val dialog: Dialog,
+    val web: WebView,
 ) {
     @JavascriptInterface
     fun cmd(s: String) {
@@ -80,8 +110,35 @@ private class SpeedrunBridge(
                 dialog.dismiss()
                 dp.updateDeckList()
             }
+        } else if (s.startsWith("sr:tutor:")) {
+            handleTutor(s.removePrefix("sr:tutor:"))
         } else if (s.startsWith("sr:record:")) {
             Timber.d("Speedrun: %s", s)
+        }
+    }
+
+    private fun reply(
+        role: String,
+        html: String,
+    ) {
+        val js = "srTutorReply(${JSONObject.quote(role)}, ${JSONObject.quote(html)});"
+        dp.runOnUiThread { web.evaluateJavascript(js, null) }
+    }
+
+    // Review-phase AI tutor. Message: <kind>:<cid>:<chosen>:<url-encoded text?>
+    private fun handleTutor(rest: String) {
+        val parts = rest.split(":", limit = 4)
+        val kind = parts.getOrNull(0) ?: return
+        val cid = parts.getOrNull(1)?.toLongOrNull() ?: return
+        val chosen = parts.getOrNull(2) ?: ""
+        val text = parts.getOrNull(3)?.let { java.net.URLDecoder.decode(it, "UTF-8") } ?: ""
+        reply("thinking", "\u2026")
+        dp.runOnUiThread {
+            dp.launchCatchingTask {
+                val context = withCol { SpeedrunTutor.buildContext(this, cid, chosen) }
+                if (context == null) return@launchCatchingTask
+                reply("tutor", SpeedrunTutor.ask(dp, context, kind, text))
+            }
         }
     }
 }
@@ -105,7 +162,7 @@ fun DeckPicker.startSpeedrunPracticeTest() {
         web.settings.domStorageEnabled = true
         val dialog = Dialog(this@startSpeedrunPracticeTest, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(web)
-        web.addJavascriptInterface(SpeedrunBridge(this@startSpeedrunPracticeTest, dialog), "AndroidSpeedrun")
+        web.addJavascriptInterface(SpeedrunBridge(this@startSpeedrunPracticeTest, dialog, web), "AndroidSpeedrun")
         // https base origin so the CDN MathJax script loads.
         web.loadDataWithBaseURL("https://speedrun.local/", html, "text/html", "utf-8", null)
         dialog.setOnDismissListener { web.destroy() }

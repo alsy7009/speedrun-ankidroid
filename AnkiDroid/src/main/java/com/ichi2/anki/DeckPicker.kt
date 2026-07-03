@@ -21,12 +21,14 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.text.util.Linkify
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
@@ -1320,6 +1322,11 @@ open class DeckPicker :
                 startSpeedrunPracticeTest()
                 return true
             }
+            R.id.action_speedrun_ai_key -> {
+                Timber.i("DeckPicker:: Speedrun AI server URL pressed")
+                showSpeedrunAiServerDialog()
+                return true
+            }
             R.id.action_check_database -> {
                 Timber.i("DeckPicker:: Check database button pressed")
                 showDatabaseErrorDialog(DatabaseErrorDialogType.DIALOG_CONFIRM_DATABASE_CHECK)
@@ -1401,6 +1408,36 @@ open class DeckPicker :
 
     fun showCreateFilteredDeckDialog() {
         startActivity(FilteredDeckOptionsFragment.getIntent(this))
+    }
+
+    /** Optional override for the Speedrun AI tutor server URL (the OpenAI key
+     * lives on that server, never on the device). */
+    private fun showSpeedrunAiServerDialog() {
+        val input =
+            EditText(this).apply {
+                inputType = InputType.TYPE_TEXT_VARIATION_URI
+                setText(SpeedrunTutor.proxyUrl(this@DeckPicker))
+                hint = "https://…"
+            }
+        AlertDialog.Builder(this).show {
+            title(text = "Speedrun AI tutor server")
+            message(
+                text =
+                    "URL of the Speedrun tutor server (it holds the API key; none is " +
+                        "stored on this device). Change only if you host your own.",
+            )
+            customView(
+                input,
+                paddingTop = 16.dp.toPx(this@DeckPicker),
+                paddingStart = 32.dp.toPx(this@DeckPicker),
+                paddingEnd = 32.dp.toPx(this@DeckPicker),
+            )
+            positiveButton(R.string.dialog_ok) {
+                SpeedrunTutor.setProxyUrl(this@DeckPicker, input.text.toString())
+                showSnackbar("Speedrun AI tutor server saved")
+            }
+            negativeButton(R.string.dialog_cancel)
+        }
     }
 
     fun exportCollection() {

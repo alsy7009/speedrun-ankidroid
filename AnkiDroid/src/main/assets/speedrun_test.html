@@ -12,44 +12,105 @@
   window.pycmd = function (s) { try { AndroidSpeedrun.cmd(s); } catch (e) {} };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <style>
-body { background: #edf3fa; color: #102a43; margin: 0;
-  font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-user-select: none; }
-#sr-wrap { max-width: 720px; margin: 0 auto; padding: 16px 18px 40px; }
-#sr-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
-#sr-progress { font-weight: 800; font-size: 16px; }
-#sr-count { color: #5a7184; font-weight: 600; font-size: 13px; }
-#sr-timer { margin-left: auto; font-weight: 700; font-size: 13px; color: #0d47a1;
-  background: #e3f0fb; border: 1px solid #b7d6f4; border-radius: 999px; padding: 6px 12px; }
-#sr-timer.up { color: #b3261e; background: #fdecea; border-color: #f2b8b5; }
-#sr-track { height: 6px; background: #d5e6f7; border-radius: 999px; margin: 8px 0 18px; overflow: hidden; }
-#sr-fill { height: 100%; width: 0; background: linear-gradient(90deg,#1565c0,#42a5f5); transition: width .25s; }
-.sr-meta { font-size: 12px; font-weight: 700; color: #1e88e5; text-transform: uppercase;
-  letter-spacing: .07em; margin-bottom: 10px; }
-.sr-problem { font-size: 19px; line-height: 1.5; margin-bottom: 16px; }
-.sr-choice { display: block; width: 100%; text-align: left; font-size: 17px;
-  background: #fff; border: 2px solid #cfe0f2; border-radius: 12px; padding: 13px 15px;
-  margin: 8px 0; color: inherit; -webkit-tap-highlight-color: transparent; }
-.sr-choice.sel { border-color: #1e88e5; background: #e3f0fb; }
-.sr-choice.lock { opacity: .95; }
-.sr-choice.correct { border-color: #2e9e5b; background: #e7f6ec; }
-.sr-choice.wrong { border-color: #d64545; background: #fbeaea; }
-.sr-rate { margin-top: 16px; display: none; }
-.sr-rate p { color: #5a7184; font-weight: 600; margin: 0 0 8px; }
-.sr-rate .row { display: flex; gap: 8px; flex-wrap: wrap; }
-.sr-btn { flex: 1; min-width: 72px; border: none; border-radius: 12px; padding: 13px;
-  font-weight: 700; font-size: 15px; color: #fff; }
-.b-again { background: #d64545; } .b-hard { background: #e08a1e; }
-.b-good { background: #2e9e5b; } .b-easy { background: #1976d2; }
-.sr-solution { margin-top: 14px; padding: 13px 15px; background: #eef5fd;
-  border-left: 4px solid #1e88e5; border-radius: 8px; font-size: 16px; line-height: 1.5; }
-#sr-results { display: none; text-align: center; padding-top: 40px; }
-#sr-results h1 { font-size: 27px; margin: 0 0 6px; }
-#sr-results p { color: #5a7184; font-size: 16px; }
-#sr-review, #sr-done { border: none; border-radius: 14px; padding: 14px 20px;
-  font-weight: 700; font-size: 16px; margin: 8px; }
-#sr-review { background: linear-gradient(90deg,#1565c0,#1e88e5); color: #fff; }
-#sr-done { background: #dfeafa; color: #102a43; }
+/* "Clean girl" study aesthetic (shared with desktop qt/aqt/speedrun_test.py):
+   warm ivory, sage accent, elegant serif headings, soft rounded shapes. */
+:root {
+  --cream: #f6f1e9; --card: #fffdf9; --ink: #4a4038; --muted: #a89a8b;
+  --line: #ece4d7; --sage: #93a888; --sage-deep: #6f8a6c; --blush: #cf9f97;
+  --shadow: 0 6px 20px rgba(120,100,70,.08);
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Nunito Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); -webkit-user-select: none;
+  overflow-wrap: anywhere; word-break: break-word; font-family: var(--sans);
+  background:
+    radial-gradient(130% 55% at 50% -10%, #fbf7f0 0%, transparent 55%),
+    radial-gradient(90% 40% at 100% 0%, #f0efe6 0%, transparent 50%),
+    var(--cream);
+}
+#sr-wrap { max-width: 680px; margin: 0 auto; padding: 22px 18px 52px; }
+#sr-bar { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+#sr-progress { font-weight: 700; font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--sage-deep); }
+#sr-count { font-size: 12px; letter-spacing: .06em; color: var(--muted); }
+#sr-timer { margin-left: auto; font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums;
+  color: var(--sage-deep); padding: 7px 14px; border-radius: 999px;
+  background: #eaf0e6; border: 1px solid #d9e4d3; }
+#sr-timer.up { color: #b06a63; background: #f7e9e6; border-color: #eccdc7; }
+#sr-track { height: 4px; background: #ece4d7; border-radius: 999px; margin: 0 0 26px; overflow: hidden; }
+#sr-fill { height: 100%; width: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--sage), var(--sage-deep)); transition: width .4s ease; }
+.sr-meta { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .16em;
+  color: var(--muted); margin-bottom: 12px; }
+.sr-problem { font-size: 20px; line-height: 1.65; margin-bottom: 20px; overflow-x: auto;
+  animation: sr-rise .45s cubic-bezier(.2,.7,.2,1) both; }
+.sr-choice { display: flex; align-items: baseline; gap: 13px; width: 100%; text-align: left;
+  font-size: 17px; line-height: 1.5; color: var(--ink);
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 18px;
+  padding: 15px 17px; margin: 10px 0; box-shadow: var(--shadow); -webkit-tap-highlight-color: transparent;
+  transition: transform .18s cubic-bezier(.2,.7,.2,1), border-color .18s, background .18s;
+  overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
+.sr-choice b { flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; background: #f1ece2; color: var(--muted);
+  font-weight: 700; font-size: 13px; }
+.sr-choice.sel { border-color: var(--sage); background: #f2f6ef; }
+.sr-choice.sel b { background: var(--sage); color: #fff; }
+.sr-choice.lock { }
+.sr-choice.correct { border-color: var(--sage-deep); background: #eef4ea; }
+.sr-choice.correct b { background: var(--sage-deep); color: #fff; }
+.sr-choice.wrong { border-color: var(--blush); background: #faeeeb; }
+.sr-choice.wrong b { background: var(--blush); color: #fff; }
+.sr-rate { margin-top: 22px; display: none; animation: sr-rise .3s ease both; }
+.sr-rate p { color: var(--muted); font-size: 12px; font-weight: 700; margin: 0 0 8px;
+  text-transform: uppercase; letter-spacing: .12em; }
+.sr-rate .row { display: flex; gap: 9px; flex-wrap: wrap; }
+.sr-btn { flex: 1; min-width: 72px; border: 1.5px solid transparent; border-radius: 999px; padding: 14px;
+  font-weight: 700; font-size: 14px; color: var(--ink);
+  transition: transform .16s cubic-bezier(.2,.7,.2,1); }
+.b-again { background: #f7e9e6; color: #b06a63; }
+.b-hard  { background: #f6efe1; color: #a98436; }
+.b-good  { background: #eef4ea; color: var(--sage-deep); }
+.b-easy  { background: #eeedf5; color: #7a77a6; }
+.sr-solution { margin-top: 18px; padding: 16px 17px; background: var(--card);
+  border: 1.5px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+  font-size: 16px; line-height: 1.65; }
+.sr-solution b:first-child { font-family: var(--serif); font-size: 18px; color: var(--sage-deep); }
+#sr-results { display: none; text-align: center; padding-top: 56px; }
+#sr-results h1 { font-weight: 600; font-size: 14px; margin: 0 0 10px; text-transform: uppercase;
+  letter-spacing: .22em; color: var(--muted); }
+#sr-results p { color: var(--ink); font: 600 36px/1.25 var(--serif); }
+#sr-review, #sr-done { border: 1.5px solid var(--line); border-radius: 999px; padding: 15px 24px;
+  font-weight: 700; font-size: 15px; margin: 22px 5px 0; }
+#sr-review { border-color: transparent; color: #fff; background: var(--sage-deep); box-shadow: var(--shadow); }
+#sr-done { background: transparent; color: var(--muted); }
+#sr-tutor-wrap { margin-top: 16px; }
+#sr-tutor-toggle { border: 1.5px solid var(--line); background: var(--card); color: var(--sage-deep);
+  border-radius: 999px; padding: 10px 16px; font-weight: 700; font-size: 13px; }
+#sr-tutor-panel { margin-top: 12px; border: 1.5px solid var(--line); border-radius: 16px;
+  background: var(--card); overflow: hidden; }
+.sr-tutor-log { padding: 12px 14px; max-height: 260px; overflow-y: auto; font-size: 15px; line-height: 1.55; }
+.sr-tutor-log .b { margin: 8px 0; padding: 9px 12px; border-radius: 14px; overflow-wrap: anywhere; }
+.sr-tutor-log .you { background: #f2f6ef; margin-left: 24px; }
+.sr-tutor-log .tutor { background: var(--cream); }
+.sr-tutor-log .thinking { color: var(--muted); font-style: italic; }
+.sr-tutor-quick { padding: 0 14px 8px; }
+.sr-tutor-quick button { border: 1px solid var(--line); background: var(--cream); color: var(--ink);
+  border-radius: 999px; padding: 8px 12px; font-size: 12px; }
+.sr-tutor-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); }
+.sr-tutor-row input { flex: 1; border: 1.5px solid var(--line); border-radius: 999px; padding: 9px 13px;
+  font-size: 14px; background: var(--cream); color: var(--ink); }
+.sr-tutor-row button { border: none; background: var(--sage-deep); color: #fff; border-radius: 999px;
+  padding: 9px 15px; font-weight: 700; }
+:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+@keyframes sr-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
@@ -74,6 +135,19 @@ body { background: #edf3fa; color: #102a43; margin: 0;
         <button class="sr-btn b-easy" data-ease="4">Easy</button>
       </div>
     </div>
+    <div id="sr-tutor-wrap" style="display:none">
+      <button id="sr-tutor-toggle" type="button">✨ Ask tutor</button>
+      <div id="sr-tutor-panel" style="display:none">
+        <div class="sr-tutor-log" id="sr-tutor-log"></div>
+        <div class="sr-tutor-quick">
+          <button type="button" id="sr-tutor-why">🤔 Why did I miss this?</button>
+        </div>
+        <div class="sr-tutor-row">
+          <input id="sr-tutor-in" placeholder="Ask about this problem…"/>
+          <button type="button" id="sr-tutor-send">Send</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="sr-results">
     <h1 id="sr-score"></h1>
@@ -91,6 +165,7 @@ window.SR = __SR_DATA__;
   var LIMIT = ((window.SR && window.SR.minutes) || 40) * 60 * 1000;
   var idx = 0, selected = null, start = Date.now(), finished = false;
   var phase = "test", reviewList = [], rIdx = 0;
+  var curCid = "", curSel = "";  // current review question (for the tutor)
 
   var el = function (id) { return document.getElementById(id); };
   function typeset(node) {
@@ -110,6 +185,7 @@ window.SR = __SR_DATA__;
     el("sr-problem").innerHTML = q.problem;
     el("sr-sol").style.display = "none";
     el("sr-rate").style.display = "none";
+    el("sr-tutor-wrap").style.display = "none";
     el("sr-rate-label").textContent = "Answer locked. How hard was it?";
     var box = el("sr-choices");
     box.innerHTML = "";
@@ -132,6 +208,33 @@ window.SR = __SR_DATA__;
   document.querySelectorAll("#sr-rate .sr-btn").forEach(function (b) {
     b.addEventListener("click", function () { rate(b.getAttribute("data-ease")); });
   });
+
+  // ---- AI tutor (review phase only; the timed test stays AI-free) ----
+  function tutorBubble(role, html) {
+    var log = el("sr-tutor-log"); if (!log) return null;
+    var prev = log.querySelector(".b.thinking"); if (prev) prev.remove();
+    var d = document.createElement("div"); d.className = "b " + role; d.innerHTML = html;
+    log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+  }
+  window.srTutorReply = function (role, html) {
+    var cls = role === "thinking" ? "tutor thinking" : (role === "you" ? "you" : "tutor");
+    var d = tutorBubble(cls, html);
+    if (window.MathJax && MathJax.typesetPromise && d) MathJax.typesetPromise([d]).catch(function () {});
+  };
+  el("sr-tutor-toggle").addEventListener("click", function () {
+    var p = el("sr-tutor-panel"); p.style.display = p.style.display === "none" ? "block" : "none";
+  });
+  el("sr-tutor-why").addEventListener("click", function () {
+    tutorBubble("you", "Why did I miss this?");
+    send("sr:tutor:mistake:" + curCid + ":" + curSel + ":");
+  });
+  function tutorAsk() {
+    var inp = el("sr-tutor-in"); var t = (inp.value || "").trim(); if (!t) return; inp.value = "";
+    tutorBubble("you", t);
+    send("sr:tutor:ask:" + curCid + ":" + curSel + ":" + encodeURIComponent(t));
+  }
+  el("sr-tutor-send").addEventListener("click", tutorAsk);
+  el("sr-tutor-in").addEventListener("keydown", function (e) { if (e.key === "Enter") tutorAsk(); });
   function rate(ease) {
     if (phase === "test") {
       if (selected === null) return;
@@ -198,6 +301,10 @@ window.SR = __SR_DATA__;
     sol.style.display = "block";
     el("sr-rate-label").textContent = "Reviewed. How well do you know it now?";
     el("sr-rate").style.display = "block";
+    curCid = String(q.cid); curSel = q._sel || "";
+    el("sr-tutor-log").innerHTML = "";
+    el("sr-tutor-panel").style.display = "none";
+    el("sr-tutor-wrap").style.display = "block";
     typeset(el("sr-card"));
   }
   function finishReview() {
