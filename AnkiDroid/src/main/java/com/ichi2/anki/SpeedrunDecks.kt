@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Speedrun: bundled competition decks.
 //
-// Ships the .apkg decks in the app's assets, auto-imports the Mixed starter sets
-// on first launch, and adds an in-app picker to import the others.
+// Ships the .apkg decks in the app's assets, auto-imports the default set
+// (Mixed + pure AMC 8/10/12 + GRE) on first launch, and keeps an in-app picker
+// for re-importing any of them.
 
 package com.ichi2.anki
 
@@ -45,10 +46,10 @@ object SpeedrunDecks {
             BundledDeck("MIXED_AMC_8", "Mixed: AMC 8 + GRE", "$ASSET_DIR/MIXED_AMC_8.apkg", starter = true),
             BundledDeck("MIXED_AMC_10", "Mixed: AMC 10 + GRE", "$ASSET_DIR/MIXED_AMC_10.apkg", starter = true),
             BundledDeck("MIXED_AMC_12", "Mixed: AMC 12 + GRE", "$ASSET_DIR/MIXED_AMC_12.apkg", starter = true),
-            BundledDeck("AMC_8", "AMC 8 only", "$ASSET_DIR/AMC_8.apkg", starter = false),
-            BundledDeck("AMC_10", "AMC 10 only", "$ASSET_DIR/AMC_10.apkg", starter = false),
-            BundledDeck("AMC_12", "AMC 12 only", "$ASSET_DIR/AMC_12.apkg", starter = false),
-            BundledDeck("GRE", "GRE only (calculus, analysis, algebra, ...)", "$ASSET_DIR/GRE.apkg", starter = false),
+            BundledDeck("AMC_8", "AMC 8 only", "$ASSET_DIR/AMC_8.apkg", starter = true),
+            BundledDeck("AMC_10", "AMC 10 only", "$ASSET_DIR/AMC_10.apkg", starter = true),
+            BundledDeck("AMC_12", "AMC 12 only", "$ASSET_DIR/AMC_12.apkg", starter = true),
+            BundledDeck("GRE", "GRE only (calculus, analysis, algebra, ...)", "$ASSET_DIR/GRE.apkg", starter = true),
         )
 
     private fun copyAssetToCache(
