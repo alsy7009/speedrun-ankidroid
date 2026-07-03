@@ -71,12 +71,12 @@
         android:id="@+id/action_speedrun_scores"
         android:icon="@drawable/ic_bar_chart_black"
         android:title="Speedrun scores"
-        ankidroid:showAsAction="ifRoom"/>
+        ankidroid:showAsAction="always"/>
     <item
         android:id="@+id/action_speedrun_timed"
         android:icon="@drawable/ic_running_clock"
         android:title="Practice Test"
-        ankidroid:showAsAction="ifRoom"/>
+        ankidroid:showAsAction="always"/>
     <item
         android:id="@+id/action_speedrun_ai_key"
         android:menuCategory="secondary"
