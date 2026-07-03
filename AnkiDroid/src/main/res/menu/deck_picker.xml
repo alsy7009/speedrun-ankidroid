@@ -69,12 +69,14 @@
         android:title="Import Speedrun decks"/>
     <item
         android:id="@+id/action_speedrun_scores"
-        android:menuCategory="secondary"
-        android:title="Speedrun scores"/>
+        android:icon="@drawable/ic_bar_chart_black"
+        android:title="Speedrun scores"
+        ankidroid:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_speedrun_timed"
-        android:menuCategory="secondary"
-        android:title="Practice Test"/>
+        android:icon="@drawable/ic_running_clock"
+        android:title="Practice Test"
+        ankidroid:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_speedrun_ai_key"
         android:menuCategory="secondary"
