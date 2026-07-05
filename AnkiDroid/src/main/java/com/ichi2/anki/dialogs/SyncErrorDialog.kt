@@ -79,17 +79,20 @@ class SyncErrorDialog : AsyncDialogFragment() {
                     }.create()
             }
             DIALOG_SYNC_CONFLICT_RESOLUTION -> {
-                // Sync conflict; allow user to cancel, or choose between local and remote versions
+                // Sync conflict; allow user to cancel, or choose between local and remote versions.
+                // Speedrun policy: the desktop is the source of truth, so the primary (positive)
+                // action on mobile is "keep remote" — download the desktop's collection. This means
+                // if edits land at the same time, the desktop wins. The user can still keep local.
                 dialog
                     .titleWithHelpIcon(
                         text = getString(R.string.sync_conflict_title_new),
                         startIcon = R.drawable.ic_sync_problem,
                     ) {
                         requireContext().openUrl(getString(R.string.link_sync_conflict_help))
-                    }.setPositiveButton(R.string.sync_conflict_keep_local_new) { _, _ ->
-                        requireSyncErrorDialogListener().showSyncErrorDialog(DIALOG_SYNC_CONFLICT_CONFIRM_KEEP_LOCAL)
-                    }.setNegativeButton(R.string.sync_conflict_keep_remote_new) { _, _ ->
+                    }.setPositiveButton(R.string.sync_conflict_keep_remote_new) { _, _ ->
                         requireSyncErrorDialogListener().showSyncErrorDialog(DIALOG_SYNC_CONFLICT_CONFIRM_KEEP_REMOTE)
+                    }.setNegativeButton(R.string.sync_conflict_keep_local_new) { _, _ ->
+                        requireSyncErrorDialogListener().showSyncErrorDialog(DIALOG_SYNC_CONFLICT_CONFIRM_KEEP_LOCAL)
                     }.setNeutralButton(R.string.dialog_cancel) { _, _ ->
                         activity?.dismissAllDialogFragments()
                     }.create()
