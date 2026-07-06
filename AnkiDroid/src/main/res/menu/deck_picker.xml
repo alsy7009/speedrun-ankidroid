@@ -65,6 +65,11 @@
         android:title="@string/menu_import"/>
     <!-- Quick actions stay on the bar; setup/config grouped under a Speedrun submenu. -->
     <item
+        android:id="@+id/action_speedrun_plan"
+        android:icon="@drawable/ic_running_clock"
+        android:title="Study Plan"
+        ankidroid:showAsAction="always"/>
+    <item
         android:id="@+id/action_speedrun_scores"
         android:icon="@drawable/ic_bar_chart_black"
         android:title="Speedrun scores"

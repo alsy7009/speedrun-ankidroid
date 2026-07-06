@@ -1312,6 +1312,11 @@ open class DeckPicker :
                 showSpeedrunDeckPicker()
                 return true
             }
+            R.id.action_speedrun_plan -> {
+                Timber.i("DeckPicker:: Speedrun study plan pressed")
+                showSpeedrunStudyPlan()
+                return true
+            }
             R.id.action_speedrun_scores -> {
                 Timber.i("DeckPicker:: Speedrun scores button pressed")
                 showSpeedrunScores()
@@ -2232,6 +2237,17 @@ open class DeckPicker :
         val intent = Reviewer.getIntent(this)
         reviewLauncher.launch(intent)
     }
+
+    /** Speedrun: select a (filtered) deck and open the reviewer on it. */
+    internal fun speedrunStudyDeck(did: DeckId) {
+        launchCatchingTask {
+            withCol { decks.select(did) }
+            openReviewer()
+        }
+    }
+
+    /** Speedrun: open Anki's statistics (surfaced from the Study Plan dashboard). */
+    internal fun openSpeedrunStatistics() = openStatistics()
 
     private fun createSubDeckDialog(did: DeckId) {
         val createDeckDialog =

@@ -158,6 +158,9 @@ fun DeckPicker.maybeImportBundledStarterDecks() {
         // raw content decks under "Speedrun::Raw Card Decks". Runs every launch so
         // it also catches decks imported/synced later.
         SpeedrunDecks.migrateDeckLayout()
+        // Build/refresh the daily Study Plan deck so it shows in the deck list
+        // (mirrors desktop, which rebuilds it on launch).
+        withCol { buildStudyPlanDeck() }
         updateDeckList()
         if (toImport.isNotEmpty()) showSnackbar("Added ${toImport.size} Speedrun deck(s)")
     }

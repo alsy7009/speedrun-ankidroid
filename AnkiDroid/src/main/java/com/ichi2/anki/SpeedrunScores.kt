@@ -10,9 +10,40 @@ package com.ichi2.anki
 
 import androidx.appcompat.app.AlertDialog
 import anki.stats.SpeedrunScore
+import anki.stats.SpeedrunScores
+import anki.stats.SpeedrunSubjectStat
 import com.ichi2.anki.CollectionManager.withCol
 import java.text.DateFormat
 import java.util.Date
+
+private fun lever(s: SpeedrunSubjectStat): Float = (s.examWeight / 100f) * (1f - s.performance / 100f)
+
+/** Per-subject diagnostics: the biggest levers + a subject-by-subject readout,
+ * mirroring the desktop dashboard's "Focus next on" + "By subject" table. */
+private fun subjectBreakdown(scores: SpeedrunScores): String =
+    buildString {
+        val subjects = scores.subjectsList
+        if (subjects.isEmpty()) return@buildString
+        val focus = subjects.sortedByDescending { lever(it) }.take(3)
+        if (focus.isNotEmpty()) {
+            append("\nFocus next on (biggest levers):\n")
+            for (s in focus) {
+                val why =
+                    if (s.firstAttempts == 0) {
+                        "not started · %.0f%% of exam".format(s.examWeight)
+                    } else {
+                        "%.0f%% accuracy · %.0f%% of exam".format(s.performance, s.examWeight)
+                    }
+                append("• ${s.label} — $why\n")
+            }
+        }
+        append("\nBy subject:\n")
+        for (s in subjects) {
+            val perf = if (s.firstAttempts > 0) "%.0f%%".format(s.performance) else "—"
+            val mem = if (s.memory >= 0) "%.0f%%".format(s.memory) else "—"
+            append("• ${s.label}: ${s.mastery.replace('_', ' ')} · perf $perf · mem $mem · seen ${s.studiedCards}/${s.totalCards}\n")
+        }
+    }
 
 private fun formatScore(
     title: String,
@@ -54,7 +85,8 @@ fun DeckPicker.showSpeedrunScores() {
                 append(formatScore("Performance", "Chance you get a new, exam-style question right.", scores.performance, scaled = false))
                 append("\n")
                 append(formatScore("Readiness", "Projected GRE Math score (200–990).", scores.readiness, scaled = true))
-                append("\nThree separate estimates — never blended.")
+                append("\nThree separate estimates — never blended.\n")
+                append(subjectBreakdown(scores))
             }
         AlertDialog
             .Builder(this@showSpeedrunScores)
