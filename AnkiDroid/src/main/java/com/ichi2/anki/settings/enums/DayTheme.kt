@@ -28,6 +28,13 @@ enum class DayTheme(
     override val entryResId: Int,
     override val styleResId: Int,
 ) : Theme {
+    // Speedrun day-mode palettes (mirror desktop qt/aqt/speedrun_themes.py).
+    MATCHA(R.string.theme_matcha_value, R.style.Theme_Speedrun_Matcha),
+    SEPIA(R.string.theme_sepia_value, R.style.Theme_Speedrun_Sepia),
+    CLAUDE(R.string.theme_claude_value, R.style.Theme_Speedrun_Claude),
+    LAVENDER(R.string.theme_lavender_value, R.style.Theme_Speedrun_Lavender),
+    SLATE(R.string.theme_slate_value, R.style.Theme_Speedrun_Slate),
+    ROSE(R.string.theme_rose_value, R.style.Theme_Speedrun_Rose),
     LIGHT(R.string.theme_light_value, R.style.Theme_Light),
     PLAIN(R.string.theme_plain_value, R.style.Theme_Light_Plain),
 }

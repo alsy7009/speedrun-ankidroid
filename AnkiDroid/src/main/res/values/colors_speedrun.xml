@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Speedrun study palettes (mirrors the desktop theme registry in
+     qt/aqt/speedrun_themes.py). Six palettes span warm -> cool. Each defines
+     bg / surface / ink / muted / line / accent / accent-dark / accent2.
+     accent-dark is a hand-darkened accent used for colorPrimaryDark. -->
+<resources>
+    <!-- Matcha (green) -->
+    <color name="sr_matcha_bg">#f4f0e4</color>
+    <color name="sr_matcha_surface">#fffdf7</color>
+    <color name="sr_matcha_ink">#41453a</color>
+    <color name="sr_matcha_muted">#9aa088</color>
+    <color name="sr_matcha_line">#e6e6d3</color>
+    <color name="sr_matcha_accent">#5f8a5a</color>
+    <color name="sr_matcha_accent_dark">#4c6f48</color>
+    <color name="sr_matcha_accent2">#8fb083</color>
+
+    <!-- Sepia (brown) -->
+    <color name="sr_sepia_bg">#f1e7d3</color>
+    <color name="sr_sepia_surface">#fbf4e6</color>
+    <color name="sr_sepia_ink">#4a3f2e</color>
+    <color name="sr_sepia_muted">#9c8a6e</color>
+    <color name="sr_sepia_line">#e2d4ba</color>
+    <color name="sr_sepia_accent">#936b3c</color>
+    <color name="sr_sepia_accent_dark">#77542f</color>
+    <color name="sr_sepia_accent2">#c7a165</color>
+
+    <!-- Claude (terracotta) -->
+    <color name="sr_claude_bg">#f7f1e8</color>
+    <color name="sr_claude_surface">#fffdf7</color>
+    <color name="sr_claude_ink">#3d3833</color>
+    <color name="sr_claude_muted">#a5988a</color>
+    <color name="sr_claude_line">#ecdfce</color>
+    <color name="sr_claude_accent">#c05e3a</color>
+    <color name="sr_claude_accent_dark">#9c4b2e</color>
+    <color name="sr_claude_accent2">#e39a76</color>
+
+    <!-- Lavender (violet) -->
+    <color name="sr_lavender_bg">#eeecf8</color>
+    <color name="sr_lavender_surface">#fdfcff</color>
+    <color name="sr_lavender_ink">#3c3849</color>
+    <color name="sr_lavender_muted">#928ca6</color>
+    <color name="sr_lavender_line">#e2ddf1</color>
+    <color name="sr_lavender_accent">#6d5bc4</color>
+    <color name="sr_lavender_accent_dark">#57489e</color>
+    <color name="sr_lavender_accent2">#a99be4</color>
+
+    <!-- Slate (blue) -->
+    <color name="sr_slate_bg">#e9edf2</color>
+    <color name="sr_slate_surface">#fbfdff</color>
+    <color name="sr_slate_ink">#2f3742</color>
+    <color name="sr_slate_muted">#7f8b98</color>
+    <color name="sr_slate_line">#d7dfe8</color>
+    <color name="sr_slate_accent">#3a6d90</color>
+    <color name="sr_slate_accent_dark">#2e5673</color>
+    <color name="sr_slate_accent2">#78a5c6</color>
+
+    <!-- Rosé (berry) -->
+    <color name="sr_rose_bg">#f6ebf0</color>
+    <color name="sr_rose_surface">#fffafc</color>
+    <color name="sr_rose_ink">#453843</color>
+    <color name="sr_rose_muted">#a88e9c</color>
+    <color name="sr_rose_line">#eddbe4</color>
+    <color name="sr_rose_accent">#b2506f</color>
+    <color name="sr_rose_accent_dark">#8f4059</color>
+    <color name="sr_rose_accent2">#df90ab</color>
+</resources>

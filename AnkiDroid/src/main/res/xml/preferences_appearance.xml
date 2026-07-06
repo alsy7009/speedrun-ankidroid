@@ -37,12 +37,12 @@
             android:icon="@drawable/ic_color_lens_white_24dp"
             app:useSimpleSummaryProvider="true"/>
         <ListPreference
-            android:defaultValue="@string/theme_light_value"
+            android:defaultValue="@string/theme_matcha_value"
             android:entries="@array/day_theme_labels"
             android:entryValues="@array/day_theme_values"
             android:key="@string/day_theme_key"
             android:shouldDisableView="true"
-            android:title="@string/day_theme"
+            android:title="@string/speedrun_palette_title"
             android:icon="@drawable/ic_light_mode_24"
             app:useSimpleSummaryProvider="true"
             />

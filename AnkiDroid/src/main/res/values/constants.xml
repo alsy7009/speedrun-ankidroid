@@ -75,6 +75,12 @@
         <item>@string/add_to_deck_decide_by_note_type</item>
     </string-array>
     <string-array name="day_theme_labels">
+        <item>@string/day_theme_matcha</item>
+        <item>@string/day_theme_sepia</item>
+        <item>@string/day_theme_claude</item>
+        <item>@string/day_theme_lavender</item>
+        <item>@string/day_theme_slate</item>
+        <item>@string/day_theme_rose</item>
         <item>@string/day_theme_light</item>
         <item>@string/day_theme_plain</item>
     </string-array>
@@ -183,6 +189,13 @@
     <string name="theme_plain_value">2</string>
     <string name="theme_black_value">3</string>
     <string name="theme_dark_value">4</string>
+    <!-- Speedrun day-mode palettes -->
+    <string name="theme_matcha_value">10</string>
+    <string name="theme_sepia_value">11</string>
+    <string name="theme_claude_value">12</string>
+    <string name="theme_lavender_value">13</string>
+    <string name="theme_slate_value">14</string>
+    <string name="theme_rose_value">15</string>
 
     <string-array name="app_theme_values">
         <item>@string/theme_follow_system_value</item>
@@ -190,6 +203,12 @@
         <item>@string/theme_night_scheme_value</item>
     </string-array>
     <string-array name="day_theme_values">
+        <item>@string/theme_matcha_value</item>
+        <item>@string/theme_sepia_value</item>
+        <item>@string/theme_claude_value</item>
+        <item>@string/theme_lavender_value</item>
+        <item>@string/theme_slate_value</item>
+        <item>@string/theme_rose_value</item>
         <item>@string/theme_light_value</item>
         <item>@string/theme_plain_value</item>
     </string-array>

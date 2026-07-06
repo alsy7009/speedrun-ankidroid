@@ -362,7 +362,7 @@ open class PrefsRepository(
     //region Appearance
 
     var appTheme: AppTheme by enumPref(R.string.app_theme_key, AppTheme.FOLLOW_SYSTEM)
-    var dayTheme: DayTheme by enumPref(R.string.day_theme_key, DayTheme.LIGHT)
+    var dayTheme: DayTheme by enumPref(R.string.day_theme_key, DayTheme.MATCHA)
     var nightTheme: NightTheme by enumPref(R.string.night_theme_key, NightTheme.BLACK)
 
     //endregion

@@ -4,7 +4,7 @@
   ~ SPDX-FileCopyrightText: Copyright (c) 2009 Casey Link <unnamedrambler@gmail.com>
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 11-arrays.xml used to contain arrays. This caused problems when changing the ordering.
     Now arrays are defined in constants.xml, and the strings are here -->
@@ -24,6 +24,13 @@
     <string name="theme_night" comment="Night/Dark theme color scheme">Night</string>
 
     <!-- day_theme_labels -->
+    <string name="speedrun_palette_title" tools:ignore="DuplicateCrowdInStrings">Theme (day palette)</string>
+    <string name="day_theme_matcha" tools:ignore="DuplicateCrowdInStrings">Matcha</string>
+    <string name="day_theme_sepia" tools:ignore="DuplicateCrowdInStrings">Sepia</string>
+    <string name="day_theme_claude" tools:ignore="DuplicateCrowdInStrings">Claude</string>
+    <string name="day_theme_lavender" tools:ignore="DuplicateCrowdInStrings">Lavender</string>
+    <string name="day_theme_slate" tools:ignore="DuplicateCrowdInStrings">Slate</string>
+    <string name="day_theme_rose" tools:ignore="DuplicateCrowdInStrings">Rosé</string>
     <string name="day_theme_light">Light</string>
     <string name="day_theme_plain">Plain</string>
 

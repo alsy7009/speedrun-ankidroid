@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Speedrun native app themes. Each palette inherits the full Light theme
+     (deck list, study buttons, dialogs, browser, etc.) and overrides only the
+     colour tokens. appBarColor / statusBar / tabLayout / widgetColorActivated
+     reference ?attr/colorPrimary in the parent, so the whole app shell adopts
+     the palette accent automatically. Mirrors qt/aqt/speedrun_themes.py. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateCrowdInStrings">
+
+    <style name="Theme_Speedrun_Matcha" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_matcha_accent</item>
+        <item name="colorPrimaryDark">@color/sr_matcha_accent_dark</item>
+        <item name="colorAccent">@color/sr_matcha_accent</item>
+        <item name="colorSurface">@color/sr_matcha_surface</item>
+        <item name="colorOnSurface">@color/sr_matcha_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_matcha_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_matcha_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_matcha_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_matcha_line</item>
+        <item name="android:colorBackground">@color/sr_matcha_bg</item>
+        <item name="android:windowBackground">@color/sr_matcha_bg</item>
+        <item name="android:textColor">@color/sr_matcha_ink</item>
+        <item name="android:textColorSecondary">@color/sr_matcha_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_matcha_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_matcha_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_matcha_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_matcha_surface</item>
+        <item name="dialogBackground">@color/sr_matcha_surface</item>
+        <item name="popupBackgroundColor">@color/sr_matcha_surface</item>
+        <item name="newCountColor">@color/sr_matcha_accent</item>
+        <item name="fab_normal">@color/sr_matcha_accent</item>
+        <item name="fab_pressed">@color/sr_matcha_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_matcha_ink</item>
+    </style>
+
+    <style name="Theme_Speedrun_Sepia" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_sepia_accent</item>
+        <item name="colorPrimaryDark">@color/sr_sepia_accent_dark</item>
+        <item name="colorAccent">@color/sr_sepia_accent</item>
+        <item name="colorSurface">@color/sr_sepia_surface</item>
+        <item name="colorOnSurface">@color/sr_sepia_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_sepia_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_sepia_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_sepia_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_sepia_line</item>
+        <item name="android:colorBackground">@color/sr_sepia_bg</item>
+        <item name="android:windowBackground">@color/sr_sepia_bg</item>
+        <item name="android:textColor">@color/sr_sepia_ink</item>
+        <item name="android:textColorSecondary">@color/sr_sepia_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_sepia_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_sepia_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_sepia_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_sepia_surface</item>
+        <item name="dialogBackground">@color/sr_sepia_surface</item>
+        <item name="popupBackgroundColor">@color/sr_sepia_surface</item>
+        <item name="newCountColor">@color/sr_sepia_accent</item>
+        <item name="fab_normal">@color/sr_sepia_accent</item>
+        <item name="fab_pressed">@color/sr_sepia_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_sepia_ink</item>
+    </style>
+
+    <style name="Theme_Speedrun_Claude" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_claude_accent</item>
+        <item name="colorPrimaryDark">@color/sr_claude_accent_dark</item>
+        <item name="colorAccent">@color/sr_claude_accent</item>
+        <item name="colorSurface">@color/sr_claude_surface</item>
+        <item name="colorOnSurface">@color/sr_claude_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_claude_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_claude_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_claude_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_claude_line</item>
+        <item name="android:colorBackground">@color/sr_claude_bg</item>
+        <item name="android:windowBackground">@color/sr_claude_bg</item>
+        <item name="android:textColor">@color/sr_claude_ink</item>
+        <item name="android:textColorSecondary">@color/sr_claude_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_claude_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_claude_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_claude_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_claude_surface</item>
+        <item name="dialogBackground">@color/sr_claude_surface</item>
+        <item name="popupBackgroundColor">@color/sr_claude_surface</item>
+        <item name="newCountColor">@color/sr_claude_accent</item>
+        <item name="fab_normal">@color/sr_claude_accent</item>
+        <item name="fab_pressed">@color/sr_claude_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_claude_ink</item>
+    </style>
+
+    <style name="Theme_Speedrun_Lavender" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_lavender_accent</item>
+        <item name="colorPrimaryDark">@color/sr_lavender_accent_dark</item>
+        <item name="colorAccent">@color/sr_lavender_accent</item>
+        <item name="colorSurface">@color/sr_lavender_surface</item>
+        <item name="colorOnSurface">@color/sr_lavender_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_lavender_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_lavender_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_lavender_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_lavender_line</item>
+        <item name="android:colorBackground">@color/sr_lavender_bg</item>
+        <item name="android:windowBackground">@color/sr_lavender_bg</item>
+        <item name="android:textColor">@color/sr_lavender_ink</item>
+        <item name="android:textColorSecondary">@color/sr_lavender_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_lavender_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_lavender_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_lavender_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_lavender_surface</item>
+        <item name="dialogBackground">@color/sr_lavender_surface</item>
+        <item name="popupBackgroundColor">@color/sr_lavender_surface</item>
+        <item name="newCountColor">@color/sr_lavender_accent</item>
+        <item name="fab_normal">@color/sr_lavender_accent</item>
+        <item name="fab_pressed">@color/sr_lavender_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_lavender_ink</item>
+    </style>
+
+    <style name="Theme_Speedrun_Slate" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_slate_accent</item>
+        <item name="colorPrimaryDark">@color/sr_slate_accent_dark</item>
+        <item name="colorAccent">@color/sr_slate_accent</item>
+        <item name="colorSurface">@color/sr_slate_surface</item>
+        <item name="colorOnSurface">@color/sr_slate_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_slate_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_slate_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_slate_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_slate_line</item>
+        <item name="android:colorBackground">@color/sr_slate_bg</item>
+        <item name="android:windowBackground">@color/sr_slate_bg</item>
+        <item name="android:textColor">@color/sr_slate_ink</item>
+        <item name="android:textColorSecondary">@color/sr_slate_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_slate_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_slate_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_slate_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_slate_surface</item>
+        <item name="dialogBackground">@color/sr_slate_surface</item>
+        <item name="popupBackgroundColor">@color/sr_slate_surface</item>
+        <item name="newCountColor">@color/sr_slate_accent</item>
+        <item name="fab_normal">@color/sr_slate_accent</item>
+        <item name="fab_pressed">@color/sr_slate_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_slate_ink</item>
+    </style>
+
+    <style name="Theme_Speedrun_Rose" parent="Theme_Light">
+        <item name="colorPrimary">@color/sr_rose_accent</item>
+        <item name="colorPrimaryDark">@color/sr_rose_accent_dark</item>
+        <item name="colorAccent">@color/sr_rose_accent</item>
+        <item name="colorSurface">@color/sr_rose_surface</item>
+        <item name="colorOnSurface">@color/sr_rose_ink</item>
+        <item name="colorSurfaceContainerLow">@color/sr_rose_bg</item>
+        <item name="colorSurfaceContainer">@color/sr_rose_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/sr_rose_line</item>
+        <item name="colorSurfaceContainerHighest">@color/sr_rose_line</item>
+        <item name="android:colorBackground">@color/sr_rose_bg</item>
+        <item name="android:windowBackground">@color/sr_rose_bg</item>
+        <item name="android:textColor">@color/sr_rose_ink</item>
+        <item name="android:textColorSecondary">@color/sr_rose_muted</item>
+        <item name="preferenceCategoryTitleTextColor">@color/sr_rose_accent</item>
+        <item name="currentDeckBackgroundColor">@color/sr_rose_line</item>
+        <item name="focusedRowBackgroundColor">@color/sr_rose_line</item>
+        <item name="alternativeBackgroundColor">@color/sr_rose_surface</item>
+        <item name="dialogBackground">@color/sr_rose_surface</item>
+        <item name="popupBackgroundColor">@color/sr_rose_surface</item>
+        <item name="newCountColor">@color/sr_rose_accent</item>
+        <item name="fab_normal">@color/sr_rose_accent</item>
+        <item name="fab_pressed">@color/sr_rose_accent_dark</item>
+        <item name="snackbarBackgroundTintColor">@color/sr_rose_ink</item>
+    </style>
+
+</resources>
