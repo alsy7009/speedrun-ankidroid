@@ -63,10 +63,7 @@
         android:id="@+id/action_import"
         android:menuCategory="secondary"
         android:title="@string/menu_import"/>
-    <item
-        android:id="@+id/action_speedrun_decks"
-        android:menuCategory="secondary"
-        android:title="Import Speedrun decks"/>
+    <!-- Quick actions stay on the bar; setup/config grouped under a Speedrun submenu. -->
     <item
         android:id="@+id/action_speedrun_scores"
         android:icon="@drawable/ic_bar_chart_black"
@@ -78,9 +75,19 @@
         android:title="Practice Test"
         ankidroid:showAsAction="always"/>
     <item
-        android:id="@+id/action_speedrun_ai_key"
+        android:id="@+id/menu_speedrun"
         android:menuCategory="secondary"
-        android:title="Speedrun: AI server URL"/>
+        android:title="Speedrun"
+        ankidroid:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_speedrun_decks"
+                android:title="Import Speedrun decks"/>
+            <item
+                android:id="@+id/action_speedrun_ai_key"
+                android:title="AI server URL"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_export_collection"
         android:menuCategory="secondary" />

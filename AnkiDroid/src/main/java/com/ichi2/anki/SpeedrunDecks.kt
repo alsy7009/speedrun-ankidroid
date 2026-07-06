@@ -98,6 +98,44 @@ object SpeedrunDecks {
     ) {
         context.sharedPrefs().edit { putStringSet(PREF_IMPORTED, codes) }
     }
+
+    private const val RAW_PARENT = "Speedrun::Raw Card Decks"
+
+    /**
+     * Idempotent deck reorganization (mirrors the desktop qt/aqt/speedrun_migrate.py):
+     * rename `Speedrun::Recommended` -> `Speedrun::Missed Topics`, and tuck every
+     * other raw `Speedrun::<x>` deck under `Speedrun::Raw Card Decks` so the
+     * curated Study Plan / Missed Topics decks stand out. Only writes when a
+     * deck still needs moving, so it also catches decks imported later. Never
+     * gates — the user can still study any deck.
+     */
+    suspend fun migrateDeckLayout() {
+        val curated = setOf("Speedrun::Study Plan", "Speedrun::Missed Topics", RAW_PARENT)
+        withCol {
+            decks.idForName("Speedrun::Recommended")?.let { rec ->
+                if (decks.idForName("Speedrun::Missed Topics") == null) {
+                    try {
+                        decks.rename(rec, "Speedrun::Missed Topics")
+                    } catch (e: Exception) {
+                        Timber.w(e, "Speedrun: rename Recommended failed")
+                    }
+                }
+            }
+            for (entry in decks.allNamesAndIds(skipEmptyDefault = true, includeFiltered = false)) {
+                val name = entry.name
+                if (!name.startsWith("Speedrun::")) continue
+                val rest = name.removePrefix("Speedrun::")
+                if (rest.contains("::")) continue // not a direct child; moves with its parent
+                if (name in curated || name == "Speedrun::Recommended") continue
+                if (name.startsWith(RAW_PARENT)) continue
+                try {
+                    decks.rename(entry.id, "$RAW_PARENT::$rest")
+                } catch (e: Exception) {
+                    Timber.w(e, "Speedrun: move %s failed", name)
+                }
+            }
+        }
+    }
 }
 
 /** Import any not-yet-imported starter decks on launch (the Mixed sets). New
@@ -105,18 +143,23 @@ object SpeedrunDecks {
 fun DeckPicker.maybeImportBundledStarterDecks() {
     val imported = SpeedrunDecks.importedCodes(this)
     val toImport = SpeedrunDecks.decks.filter { it.starter && it.code !in imported }
-    if (toImport.isEmpty()) return
     launchCatchingTask {
-        withProgress {
-            for (deck in toImport) {
-                Timber.i("Speedrun: importing bundled deck %s", deck.label)
-                SpeedrunDecks.importDeck(this@maybeImportBundledStarterDecks, deck)
+        if (toImport.isNotEmpty()) {
+            withProgress {
+                for (deck in toImport) {
+                    Timber.i("Speedrun: importing bundled deck %s", deck.label)
+                    SpeedrunDecks.importDeck(this@maybeImportBundledStarterDecks, deck)
+                }
             }
+            imported.addAll(toImport.map { it.code })
+            SpeedrunDecks.setImportedCodes(this@maybeImportBundledStarterDecks, imported)
         }
-        imported.addAll(toImport.map { it.code })
-        SpeedrunDecks.setImportedCodes(this@maybeImportBundledStarterDecks, imported)
+        // Reorganize (idempotent): rename Recommended -> Missed Topics and tuck
+        // raw content decks under "Speedrun::Raw Card Decks". Runs every launch so
+        // it also catches decks imported/synced later.
+        SpeedrunDecks.migrateDeckLayout()
         updateDeckList()
-        showSnackbar("Added ${toImport.size} Speedrun deck(s)")
+        if (toImport.isNotEmpty()) showSnackbar("Added ${toImport.size} Speedrun deck(s)")
     }
 }
 
